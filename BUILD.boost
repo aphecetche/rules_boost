@@ -16,6 +16,14 @@ config_setting(
     ],
 )
 
+config_setting(
+    name = "osx_x86_64",
+    constraint_values = [
+        "@bazel_tools//platforms:osx",
+        "@bazel_tools//platforms:x86_64",
+    ],
+)
+
 BOOST_CTX_ASM_SOURCES = select({
     ":linux_x86_64": [
         "libs/context/src/asm/jump_x86_64_sysv_elf_gas.S",
@@ -27,6 +35,11 @@ BOOST_CTX_ASM_SOURCES = select({
         "libs/context/src/asm/jump_x86_64_ms_pe_masm.asm",
         "libs/context/src/asm/ontop_x86_64_ms_pe_masm.asm",
     ],
+    ":osx_x86_64": [
+        "libs/context/src/asm/jump_x86_64_sysv_macho_gas.S",
+        "libs/context/src/asm/make_x86_64_sysv_macho_gas.S",
+        "libs/context/src/asm/ontop_x86_64_sysv_macho_gas.S",
+    ],
 })
 
 boost_library(
@@ -37,6 +50,9 @@ boost_library(
         ],
         ":windows_x86_64": [
             "libs/context/src/windows/stack_traits.cpp",
+        ],
+        ":osx_x86_64": [
+            "libs/context/src/posix/stack_traits.cpp",
         ],
     }),
     exclude_src = [
@@ -61,6 +77,10 @@ BOOST_FIBER_NUMA_SRCS = select({
     ":windows_x86_64": [
         "libs/fiber/src/numa/windows/pin_thread.cpp",
         "libs/fiber/src/numa/windows/topology.cpp",
+    ],
+    ":osx_x86_64": [
+        "libs/fiber/src/numa/pin_thread.cpp",
+        "libs/fiber/src/numa/topology.cpp",
     ],
 })
 
@@ -94,6 +114,10 @@ boost_library(
 
 boost_library(
     name = "pool",
+)
+
+boost_library(
+    name = "proto",
 )
 
 boost_library(
@@ -319,6 +343,10 @@ boost_library(
 )
 
 boost_library(
+    name = "dll",
+)
+
+boost_library(
     name = "container",
     srcs = [
         "libs/container/src/dlmalloc_ext_2_8_6.c",
@@ -351,6 +379,9 @@ BOOST_CORO_SRCS = select({
     ],
     ":windows_x86_64": [
         "libs/coroutine/src/windows/stack_traits.cpp",
+    ],
+    ":osx_x86_64": [
+        "libs/coroutine/src/posix/stack_traits.cpp",
     ],
 })
 
@@ -514,6 +545,10 @@ boost_library(
 )
 
 boost_library(
+    name = "msm",
+)
+
+boost_library(
     name = "functional",
     deps = [
         ":detail",
@@ -559,6 +594,37 @@ boost_library(
 
 boost_library(
     name = "get_pointer",
+)
+
+boost_library(
+    name = "qvm",
+    deps = [
+        ":core",
+        ":exception",
+        ":utility",
+        ":assert",
+        ":static_assert",
+        ":throw_exception"
+    ],
+)
+
+boost_library(
+    name = "geometry",
+    deps = [
+        ":algorithm",
+        ":call_traits",
+        ":config",
+        ":function_types",
+        ":lexical_cast",
+        ":math",
+        ":mpl",
+        ":numeric_conversion",
+        ":qvm",
+        ":range",
+        ":rational",
+        ":tokenizer",
+        ":variant",
+    ],
 )
 
 boost_library(
