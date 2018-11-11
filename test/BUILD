@@ -81,30 +81,25 @@ cc_test(
 )
 
 cc_test(
-    name = "context_test",
-    size = "small",
-    srcs = ["context_test.cc"],
-    deps = [
-        "@boost//:context",
-    ],
-)
-
-cc_test(
     name = "compute_test",
     size = "small",
     srcs = ["compute_test.cc"],
     deps = [
         "@boost//:compute",
-    ]
+    ],
 )
 
 cc_test(
-    name = "coroutine_test",
+    name ="qvm_test",
+    size="small",
+    srcs=["qvm_test.cc"],
+    deps=["@boost//:qvm"]
+)
+cc_test(
+    name = "geometry_test",
     size = "small",
-    srcs = ["coroutine_test.cc"],
-    deps = [
-        "@boost//:coroutine",
-    ]
+    srcs = ["geometry_test.cc"],
+    deps = ["@boost//:geometry"],
 )
 
 cc_test(
@@ -119,7 +114,7 @@ cc_test(
 cc_test(
     name = "endian",
     size = "small",
-    srcs = [ "endian.cc" ],
+    srcs = ["endian.cc"],
     deps = [
         "@boost//:endian",
         "@boost//:static_assert",
